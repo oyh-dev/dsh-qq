@@ -1,0 +1,19 @@
+node_modules/
+*.log
+.DS_Store
+Thumbs.db
+
+# runtime data / credentials
+.qq-bridge/
+data/
+qq-media/
+qq-chats/
+qq-proactive-images/
+bilibili-cookies.json
+state.json
+*.zstd
+auth_token.txt
+
+# local media
+*.mp4
+*.webm
