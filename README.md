@@ -118,7 +118,7 @@ LuckyLillia.exe --headless --qq=<bot-uin>
 node --test "test/*.test.mjs"
 ```
 
-46 个文件、335 条用例，全部离线（stub LLM / stub fetch / 临时目录），不消耗真实 token、不联网。
+47 个文件、348 条用例，全部离线（stub LLM / stub fetch / 临时目录），不消耗真实 token、不联网。
 
 ## 已知限制
 

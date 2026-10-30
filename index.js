@@ -353,6 +353,15 @@ export function apply(ctx, config = {}) {
     }));
 
     ctx.effect(() => ctx.systemPrompt.context({
+      name: 'qq-sleep',
+      order: 49,
+      text: () => {
+        const text = bridge.sleepStateFacts?.() || '';
+        return text ? `## 你的睡眠（事实，不要编）\n${text}` : '';
+      },
+    }));
+
+    ctx.effect(() => ctx.systemPrompt.context({
       name: 'qq-attachment',
       order: 47,
       text: () => {
