@@ -1,10 +1,15 @@
 import http from 'node:http';
+import os from 'node:os';
+import path from 'node:path';
 import { readFileSync, appendFileSync } from 'node:fs';
-import wsPkg from 'file:///C:/Users/33930/.dsh/profiles/desktop/node_modules/ws/index.js';
+import { fileURLToPath } from 'node:url';
+import { loadWs } from './ws-loader.mjs';
 
+const wsPkg = await loadWs();
 const { WebSocketServer } = wsPkg;
-const TOKEN = 'test-token';
-const LOG = 'D:/dsh-qq-data/qq-debug/mock.log';
+const TOKEN = process.env.MOCK_TOKEN || 'mock-token';
+const LOG = path.join(os.tmpdir(), 'mock-onebot.log');
+const PNG = fileURLToPath(new URL('./test.png', import.meta.url));
 const PORT = 3001;
 
 function log(line) {
@@ -15,7 +20,7 @@ function log(line) {
 
 const httpServer = http.createServer((req, res) => {
   if (req.url === '/test.png') {
-    const bytes = readFileSync('D:/dsh-qq-data/dsh-qq/test/test.png');
+    const bytes = readFileSync(PNG);
     res.writeHead(200, { 'Content-Type': 'image/png', 'Content-Length': bytes.length });
     res.end(bytes);
     return;
@@ -51,7 +56,7 @@ wss.on('connection', (socket, req) => {
     const reply = (data, retcode = 0) => socket.send(JSON.stringify({ status: retcode === 0 ? 'ok' : 'failed', retcode, data, echo }));
     switch (action) {
       case 'get_login_info':
-        reply({ user_id: 10000, nickname: 'DSH-TestBot' });
+        reply({ user_id: 1000000002, nickname: 'TestBot' });
         break;
       case 'get_friend_list':
         reply([{ user_id: 10001, nickname: '测试用户', remark: 'tester' }]);

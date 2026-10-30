@@ -1,39 +1,36 @@
 {
   "name": "@dsh-local/dsh-qq",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "type": "module",
-  "description": "QQ bridge for DeepSeek Harness: OneBot 11 messaging, media understanding, Qzone, app control with owner approval, daily memory and proactive chat",
-  "license": "MIT",
-  "engines": {
-    "node": ">=20"
-  },
-  "keywords": [
-    "deepseek-harness",
-    "dsh",
-    "cordis",
-    "qq",
-    "onebot",
-    "llbot",
-    "chatbot"
-  ],
+  "description": "QQ bridge for DeepSeek Harness: OneBot messaging, media understanding, Qzone, and an in-page control panel",
   "exports": {
     ".": "./index.js",
+    "./client": "./client.js",
     "./locale/*.json": "./locale/*.json",
     "./icon": "./icon.svg"
   },
   "files": [
     "index.js",
+    "client.js",
     "lib/*.js",
     "cordis.patch.yml",
     "locale/*.json",
     "icon.svg",
     "README.md",
-    "LICENSE"
+    "FEATURES.md"
   ],
+  "devDependencies": {
+    "ws": "^8.18.0"
+  },
   "dsh": {
     "bundle": {
       "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": []
     }
   }
 }

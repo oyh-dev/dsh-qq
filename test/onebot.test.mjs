@@ -1,6 +1,7 @@
-import wsPkg from 'file:///C:/Users/33930/.dsh/profiles/desktop/node_modules/ws/index.js';
+import { loadWs } from './ws-loader.mjs';
 import { OneBotClient } from '../lib/onebot.js';
 
+const wsPkg = await loadWs();
 const { WebSocketServer } = wsPkg;
 
 const wss = new WebSocketServer({ port: 3011, path: '/', verifyClient: (info, done) => {
@@ -25,7 +26,7 @@ wss.on('connection', (socket) => {
     const payload = JSON.parse(raw.toString());
     received.push(payload);
     if (payload.action === 'get_login_info') {
-      socket.send(JSON.stringify({ status: 'ok', retcode: 0, data: { user_id: 10000, nickname: 'Bot' }, echo: payload.echo }));
+      socket.send(JSON.stringify({ status: 'ok', retcode: 0, data: { user_id: 1000000002, nickname: 'Bot' }, echo: payload.echo }));
     } else if (payload.action === 'send_private_msg') {
       socket.send(JSON.stringify({ status: 'ok', retcode: 0, data: { message_id: 99 }, echo: payload.echo }));
     }

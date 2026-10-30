@@ -43,7 +43,7 @@ await store.init();
 
 const t = (iso) => new Date(iso).getTime();
 await store.record({ chatType: 'private', chatId: '10001', chatName: '测试用户', fromId: '10001', fromName: '测试用户', direction: 'in', text: '今天聊了 QQ 插件和记忆压缩', ts: t('2026-10-19T10:00:00+08:00') });
-await store.record({ chatType: 'private', chatId: '10001', chatName: '测试用户', fromId: '10000', fromName: '我', direction: 'out', text: '决定每天 04:00 自动总结前 24 小时', ts: t('2026-10-19T10:01:00+08:00') });
+await store.record({ chatType: 'private', chatId: '10001', chatName: '测试用户', fromId: '1000000002', fromName: '我', direction: 'out', text: '决定每天 04:00 自动总结前 24 小时', ts: t('2026-10-19T10:01:00+08:00') });
 await store.record({ chatType: 'group', chatId: '20002', chatName: '群 20002', fromId: '10002', fromName: '群友', direction: 'in', text: '群里讨论了图片和视频抽帧', ts: t('2026-10-20T02:00:00+08:00') });
 
 const result = await store.runDaily('2026-10-20');
@@ -62,16 +62,18 @@ const search = await store.search('图片');
 assert.ok(search.count >= 1);
 assert.equal(search.hits[0].date, '2026-10-20');
 
+// 切点从 04:00 改成 09:30（2026-10-29）：早上的消息算进当天，不再半夜切一刀
 assert.equal(memoryDayKey(new Date('2026-10-19T02:00:00+08:00')), '2026-10-19');
 assert.equal(memoryDayKey(new Date('2026-10-19T10:00:00+08:00')), '2026-10-20');
-assert.equal(memoryDayKey(new Date('2026-10-20T04:00:00+08:00')), '2026-10-21');
-assert.equal(lastClosedDigestKey(new Date('2026-10-20T03:00:00+08:00')), '2026-10-19');
-assert.equal(lastClosedDigestKey(new Date('2026-10-20T04:00:00+08:00')), '2026-10-20');
+assert.equal(memoryDayKey(new Date('2026-10-20T09:29:00+08:00')), '2026-10-20', '09:29 还没到切点');
+assert.equal(memoryDayKey(new Date('2026-10-20T09:30:00+08:00')), '2026-10-21', '09:30 之后算第二天');
+assert.equal(lastClosedDigestKey(new Date('2026-10-20T09:00:00+08:00')), '2026-10-19', '切点前：上一份是昨天');
+assert.equal(lastClosedDigestKey(new Date('2026-10-20T09:30:00+08:00')), '2026-10-20', '切点后：今天这份关上了');
 
-const redacted = redact('api_key: sk-abcdef1234567890；Authorization: Bearer abc.def.ghi；token: test-token；密码：hunter2');
+const redacted = redact('api_key: sk-abcdef1234567890；Authorization: Bearer abc.def.ghi；token: qqbot-example-token-0001；密码：hunter2');
 assert.doesNotMatch(redacted, /sk-abcdef/);
 assert.doesNotMatch(redacted, /abc\.def/);
-assert.doesNotMatch(redacted, /test-token/);
+assert.doesNotMatch(redacted, /qqbot-example/);
 assert.doesNotMatch(redacted, /hunter2/);
 assert.match(redacted, /已脱敏|REDACTED/);
 
