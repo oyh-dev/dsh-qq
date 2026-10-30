@@ -6,6 +6,8 @@
 
 **全部功能按子系统列出（含设计取舍）→ [FEATURES.md](./FEATURES.md)**
 
+**版本变化 → [CHANGELOG.md](./CHANGELOG.md)**
+
 ## 它能做什么
 
 | 类别 | 一句话 |
